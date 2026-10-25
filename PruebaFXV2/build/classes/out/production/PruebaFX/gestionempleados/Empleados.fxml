@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gestionempleados.controlador.EmpleadosController"
+            style="-fx-background-color: #F4F7FC;">
+
+    <top>
+
+        <VBox spacing="15"
+              style="-fx-background-color: white;
+                     -fx-border-color: #E2E8F0;
+                     -fx-border-width: 0 0 1 0;
+                     -fx-padding: 20 25 20 25;">
+
+            <HBox alignment="CENTER_LEFT"
+                  spacing="10">
+
+                <VBox HBox.hgrow="ALWAYS"
+                      spacing="3">
+
+                    <Label text="Empleados"
+                           style="-fx-text-fill: #1E3A5F;
+                                  -fx-font-size: 24px;
+                                  -fx-font-weight: bold;"/>
+
+                    <Label text="Administración de empleados"
+                           style="-fx-text-fill: #718096;
+                                  -fx-font-size: 13px;"/>
+
+                </VBox>
+
+                <Button text="Modificar empleado"
+                        onAction="#modificarEmpleado"
+                        prefHeight="42"
+                        style="-fx-background-color: #F59E0B;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 8;
+                               -fx-padding: 0 18 0 18;
+                               -fx-cursor: hand;"/>
+
+                <Button text="+   Nuevo empleado"
+                        onAction="#abrirNuevoEmpleado"
+                        prefHeight="42"
+                        style="-fx-background-color: #2864E6;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 8;
+                               -fx-padding: 0 18 0 18;
+                               -fx-cursor: hand;"/>
+
+            </HBox>
+
+            <HBox spacing="10">
+
+                <TextField fx:id="txtBuscar"
+                           promptText="Buscar por nombre, apellido o email..."
+                           HBox.hgrow="ALWAYS"
+                           prefHeight="38"/>
+
+                <ComboBox fx:id="cmbEstadoFiltro"
+                          promptText="Estado"
+                          prefWidth="160"
+                          prefHeight="38"/>
+
+                <ComboBox fx:id="cmbRolFiltro"
+                          promptText="Rol"
+                          prefWidth="160"
+                          prefHeight="38"/>
+
+                <Button text="Limpiar"
+                        onAction="#limpiarFiltros"
+                        prefHeight="38"
+                        style="-fx-background-color: #E2E8F0;
+                               -fx-text-fill: #1A202C;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 7;
+                               -fx-cursor: hand;"/>
+
+            </HBox>
+
+        </VBox>
+
+    </top>
+
+    <center>
+
+        <VBox spacing="15">
+
+            <padding>
+                <Insets top="25"
+                        right="25"
+                        bottom="25"
+                        left="25"/>
+            </padding>
+
+            <HBox spacing="15">
+
+                <VBox HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 10;
+                             -fx-border-color: #DCE6F7;
+                             -fx-border-radius: 10;
+                             -fx-padding: 15;">
+
+                    <Label text="TOTAL"
+                           style="-fx-text-fill: #718096;
+                                  -fx-font-size: 12px;
+                                  -fx-font-weight: bold;"/>
+
+                    <Label fx:id="lblTotal"
+                           text="0"
+                           style="-fx-text-fill: #2864E6;
+                                  -fx-font-size: 25px;
+                                  -fx-font-weight: bold;"/>
+
+                </VBox>
+
+                <VBox HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 10;
+                             -fx-border-color: #DCE6F7;
+                             -fx-border-radius: 10;
+                             -fx-padding: 15;">
+
+                    <Label text="ACTIVOS"
+                           style="-fx-text-fill: #718096;
+                                  -fx-font-size: 12px;
+                                  -fx-font-weight: bold;"/>
+
+                    <Label fx:id="lblActivos"
+                           text="0"
+                           style="-fx-text-fill: #2E8B57;
+                                  -fx-font-size: 25px;
+                                  -fx-font-weight: bold;"/>
+
+                </VBox>
+
+                <VBox HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: white;
+                             -fx-background-radius: 10;
+                             -fx-border-color: #DCE6F7;
+                             -fx-border-radius: 10;
+                             -fx-padding: 15;">
+
+                    <Label text="NO ACTIVOS"
+                           style="-fx-text-fill: #718096;
+                                  -fx-font-size: 12px;
+                                  -fx-font-weight: bold;"/>
+
+                    <Label fx:id="lblNoActivos"
+                           text="0"
+                           style="-fx-text-fill: #E67E22;
+                                  -fx-font-size: 25px;
+                                  -fx-font-weight: bold;"/>
+
+                </VBox>
+
+            </HBox>
+
+            <VBox VBox.vgrow="ALWAYS"
+                  spacing="10"
+                  style="-fx-background-color: white;
+                         -fx-border-color: #2864E6;
+                         -fx-border-radius: 10;
+                         -fx-background-radius: 10;
+                         -fx-padding: 15;">
+
+                <Label text="LISTA DE EMPLEADOS"
+                       style="-fx-text-fill: #35599D;
+                              -fx-font-size: 16px;
+                              -fx-font-weight: bold;"/>
+
+                <Label text="Doble clic sobre un empleado para modificarlo"
+                       style="-fx-text-fill: #718096;
+                              -fx-font-size: 12px;"/>
+
+                <TableView fx:id="tablaEmpleados"
+                           VBox.vgrow="ALWAYS">
+
+                    <columns>
+
+                        <TableColumn fx:id="colId"
+                                     text="ID"
+                                     prefWidth="55"/>
+
+                        <TableColumn fx:id="colNombre"
+                                     text="Empleado"
+                                     prefWidth="180"/>
+
+                        <TableColumn fx:id="colTelefono"
+                                     text="Teléfono"
+                                     prefWidth="120"/>
+
+                        <TableColumn fx:id="colEmail"
+                                     text="Email"
+                                     prefWidth="190"/>
+
+                        <TableColumn fx:id="colRol"
+                                     text="Rol"
+                                     prefWidth="110"/>
+
+                        <TableColumn fx:id="colTurno"
+                                     text="Turno"
+                                     prefWidth="110"/>
+
+                        <TableColumn fx:id="colSalario"
+                                     text="Salario"
+                                     prefWidth="100"/>
+
+                        <TableColumn fx:id="colEstado"
+                                     text="Estado"
+                                     prefWidth="100"/>
+
+                        <TableColumn fx:id="colFechaIngreso"
+                                     text="Fecha ingreso"
+                                     prefWidth="110"/>
+
+                    </columns>
+
+                </TableView>
+
+                <HBox alignment="CENTER_RIGHT">
+
+                    <Button text="Eliminar empleado"
+                            onAction="#eliminarEmpleado"
+                            prefHeight="38"
+                            style="-fx-background-color: #E74C3C;
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 7;
+                                   -fx-cursor: hand;"/>
+
+                </HBox>
+
+            </VBox>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>
