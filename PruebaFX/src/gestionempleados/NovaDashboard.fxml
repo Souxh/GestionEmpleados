@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gestionempleados.controlador.NovaDashboardController"
+            prefWidth="1250" prefHeight="850"
+            style="-fx-background-color: #F5F7FB;">
+
+    <!-- CABECERA -->
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="18"
+              prefHeight="72"
+              style="-fx-background-color: #2864E6;">
+
+            <padding>
+                <Insets top="0" right="24" bottom="0" left="26"/>
+            </padding>
+            
+            <ImageView fitWidth="42" 
+                        fitHeight="42"
+                        preserveRatio="true">
+                 <image>
+                     <Image url="imagen/logo.png"/>
+                 </image>
+             </ImageView>
+
+            <Label text="NOVA"
+                   style="-fx-text-fill: white; -fx-font-size: 27px; -fx-font-weight: bold;"/>
+
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Label text="?"
+                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <Label text="  Admin  "
+                   style="-fx-background-color: #102746; -fx-background-radius: 22; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 11 18 11 18;"/>
+        </HBox>
+    </top>
+
+    <!-- MENU LATERAL -->
+
+    <left>
+        <VBox spacing="20" prefWidth="250"
+              style="-fx-background-color: #0D223D;">
+
+            <padding>
+                <Insets top="32" right="18" bottom="24" left="22"/>
+            </padding>
+
+            <Label text="PRINCIPAL"
+                   style="-fx-text-fill: #B9C6D8; -fx-font-size: 12px;"/>
+
+            <Button text="   Nueva venta"
+                    maxWidth="Infinity"
+                    prefHeight="42"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT;"/>
+
+            <Label text="INVENTARIO"
+                   style="-fx-text-fill: #B9C6D8; -fx-font-size: 12px;"/>
+
+            <Button text="   Control inventario"
+                    maxWidth="Infinity"
+                    prefHeight="42"
+                    style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT;"/>
+
+            <Label text="ADMINISTRACIÓN"
+                   style="-fx-text-fill: #B9C6D8; -fx-font-size: 12px;"/>
+
+            <!-- INDICADOR DEL MODULO ACTUAL: SIN FUNCION -->
+
+            <Button text="   Control de empleados"
+                    maxWidth="Infinity"
+                    prefHeight="42"
+                    style="-fx-background-color: #1D3D65; -fx-background-radius: 8; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT;"/>
+
+        </VBox>
+    </left>
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+    <center>
+        <ScrollPane fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    style="-fx-background-color: transparent; -fx-background: transparent;">
+
+            <content>
+                <VBox spacing="24">
+
+                    <padding>
+                        <Insets top="26" right="26" bottom="28" left="26"/>
+                    </padding>
+
+                    <!-- BOTONES SUPERIORES -->
+
+                    <HBox alignment="CENTER_RIGHT" spacing="12">
+
+                        <Button text="+   Nuevo empleado"
+                                onAction="#abrirNuevoEmpleado"
+                                prefHeight="42"
+                                style="-fx-background-color: #2864E6; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 9; -fx-padding: 0 20 0 20; -fx-cursor: hand;"/>
+
+                        <Button text="Gestión"
+                                onAction="#abrirGestionEmpleados"
+                                prefHeight="42"
+                                style="-fx-background-color: #0D223D; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 9; -fx-padding: 0 25 0 25; -fx-cursor: hand;"/>
+
+                    </HBox>
+
+                    <!-- TARJETAS DE RESUMEN -->
+
+                    <HBox spacing="18">
+
+                        <VBox spacing="9"
+                              HBox.hgrow="ALWAYS"
+                              prefHeight="112"
+                              style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #2864E6; -fx-border-radius: 12; -fx-effect: dropshadow(gaussian, #00000025, 5, 0, 0, 2);">
+
+                            <padding>
+                                <Insets top="17" right="18" bottom="14" left="20"/>
+                            </padding>
+
+                            <Label text="EMPLEADOS TOTALES"
+                                   style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+
+                            <Label fx:id="lblTotalEmpleados"
+                                   text="0"
+                                   style="-fx-text-fill: #111827; -fx-font-size: 29px; -fx-font-weight: bold;"/>
+                        </VBox>
+
+                        <VBox spacing="9"
+                              HBox.hgrow="ALWAYS"
+                              prefHeight="112"
+                              style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #2864E6; -fx-border-radius: 12; -fx-effect: dropshadow(gaussian, #00000025, 5, 0, 0, 2);">
+
+                            <padding>
+                                <Insets top="17" right="18" bottom="14" left="20"/>
+                            </padding>
+
+                            <Label text="EMPLEADOS ACTIVOS"
+                                   style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+
+                            <Label fx:id="lblEmpleadosActivos"
+                                   text="0"
+                                   style="-fx-text-fill: #16834A; -fx-font-size: 29px; -fx-font-weight: bold;"/>
+                        </VBox>
+
+                        <VBox spacing="9"
+                              HBox.hgrow="ALWAYS"
+                              prefHeight="112"
+                              style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #2864E6; -fx-border-radius: 12; -fx-effect: dropshadow(gaussian, #00000025, 5, 0, 0, 2);">
+
+                            <padding>
+                                <Insets top="17" right="18" bottom="14" left="20"/>
+                            </padding>
+
+                            <Label text="EMPLEADOS NO ACTIVOS"
+                                   style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+
+                            <Label fx:id="lblEmpleadosNoActivos"
+                                   text="0"
+                                   style="-fx-text-fill: #C53030; -fx-font-size: 29px; -fx-font-weight: bold;"/>
+                        </VBox>
+
+                        <VBox spacing="9"
+                              HBox.hgrow="ALWAYS"
+                              prefHeight="112"
+                              style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: #2864E6; -fx-border-radius: 12; -fx-effect: dropshadow(gaussian, #00000025, 5, 0, 0, 2);">
+
+                            <padding>
+                                <Insets top="17" right="18" bottom="14" left="20"/>
+                            </padding>
+
+                            <Label text="ACCIONES REGISTRADAS"
+                                   style="-fx-text-fill: #64748B; -fx-font-size: 12px;"/>
+
+                            <Label fx:id="lblTotalAcciones"
+                                   text="0"
+                                   style="-fx-text-fill: #1E3A8A; -fx-font-size: 29px; -fx-font-weight: bold;"/>
+                        </VBox>
+
+                    </HBox>
+
+                    <!-- EMPLEADOS ACTIVOS Y ULTIMAS ACCIONES -->
+
+                    <HBox spacing="18" alignment="TOP_CENTER">
+
+                        <VBox spacing="14"
+                              HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: white; -fx-background-radius: 11; -fx-border-color: #2864E6; -fx-border-radius: 11; -fx-effect: dropshadow(gaussian, #00000025, 5, 0, 0, 2);">
+
+                            <padding>
+                                <Insets top="18" right="16" bottom="18" left="16"/>
+                            </padding>
+
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+
+                                <Label text="♙"
+                                       style="-fx-text-fill: #2864E6; -fx-font-size: 21px;"/>
+
+                                <Label text="EMPLEADOS ACTIVOS"
+                                       style="-fx-text-fill: #244A91; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                            </HBox>
+
+                            <Label text="Personal actualmente activo"
+                                   style="-fx-text-fill: #718096; -fx-font-size: 12px;"/>
+
+                            <TableView fx:id="tablaEmpleados"
+                                       prefHeight="470"
+                                       VBox.vgrow="ALWAYS">
+
+                                <columns>
+
+                                    <TableColumn fx:id="colEmpleado"
+                                                 text="Empleado"
+                                                 prefWidth="190"/>
+
+                                    <TableColumn fx:id="colRol"
+                                                 text="Rol"
+                                                 prefWidth="125"/>
+
+                                    <TableColumn fx:id="colTurno"
+                                                 text="Turno"
+                                                 prefWidth="115"/>
+
+                                    <TableColumn fx:id="colEstado"
+                                                 text="Estado"
+                                                 prefWidth="90"/>
+
+                                    <TableColumn fx:id="colSalario"
+                                                 text="Salario"
+                                                 prefWidth="105"/>
+
+                                </columns>
+
+                            </TableView>
+
+                            <Button text="Modificar empleado"
+                                    onAction="#modificarEmpleado"
+                                    prefHeight="38"
+                                    style="-fx-background-color: #E8EEF9; -fx-text-fill: #1E3A5F; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+
+                        </VBox>
+
+                        <VBox spacing="14"
+                              HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: white; -fx-background-radius: 11; -fx-border-color: #2864E6; -fx-border-radius: 11; -fx-effect: dropshadow(gaussian, #00000025, 5, 0, 0, 2);">
+
+                            <padding>
+                                <Insets top="18" right="16" bottom="18" left="16"/>
+                            </padding>
+
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+
+                                <Label text="◷"
+                                       style="-fx-text-fill: #2864E6; -fx-font-size: 21px;"/>
+
+                                <Label text="ÚLTIMAS ACCIONES"
+                                       style="-fx-text-fill: #244A91; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                            </HBox>
+
+                            <Label text="Actividad reciente del sistema"
+                                   style="-fx-text-fill: #718096; -fx-font-size: 12px;"/>
+
+                            <TableView fx:id="tablaAcciones"
+                                       prefHeight="470"
+                                       VBox.vgrow="ALWAYS">
+
+                                <columns>
+
+                                    <TableColumn fx:id="colAccionEmpleado"
+                                                 text="Empleado"
+                                                 prefWidth="145"/>
+
+                                    <TableColumn fx:id="colAccion"
+                                                 text="Acción"
+                                                 prefWidth="130"/>
+
+                                    <TableColumn fx:id="colDescripcion"
+                                                 text="Descripción"
+                                                 prefWidth="205"/>
+
+                                    <TableColumn fx:id="colFecha"
+                                                 text="Fecha"
+                                                 prefWidth="125"/>
+
+                                </columns>
+
+                            </TableView>
+
+                        </VBox>
+
+                    </HBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
