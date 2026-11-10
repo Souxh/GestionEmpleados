@@ -1,3 +1,4 @@
+
 package gestionempleados.controlador;
 
 import gestionempleados.modelo.DatosTemporales;
@@ -17,120 +18,49 @@ import javafx.stage.Stage;
 
 public class NuevoEmpleadoController {
 
-    @FXML
-    private TextField txtNombre;
-
-    @FXML
-    private TextField txtApellidos;
-
-    @FXML
-    private TextField txtTelefono;
-
-    @FXML
-    private TextField txtEmail;
-
-    @FXML
-    private TextField txtDireccion;
-
-    @FXML
-    private DatePicker fechaIngreso;
-
-    @FXML
-    private TextField txtSalario;
-
-    @FXML
-    private ComboBox<Rol> cmbRol;
-
-    @FXML
-    private ComboBox<Turno> cmbTurno;
-
-    @FXML
-    private ComboBox<String> cmbEstado;
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtApellidos;
+    @FXML private TextField txtTelefono;
+    @FXML private TextField txtEmail;
+    @FXML private TextField txtDireccion;
+    @FXML private DatePicker fechaIngreso;
+    @FXML private TextField txtSalario;
+    @FXML private ComboBox<Rol> cmbRol;
+    @FXML private ComboBox<Turno> cmbTurno;
+    @FXML private ComboBox<String> cmbEstado;
 
     private Empleado empleadoEditar;
 
-    // inicializar
-
     @FXML
     public void initialize() {
-
         DatosTemporales.inicializar();
 
-        cmbRol.setItems(
-            DatosTemporales.getRoles()
-        );
+        cmbRol.setItems(DatosTemporales.getRoles());
+        cmbTurno.setItems(DatosTemporales.getTurnos());
 
-        cmbTurno.setItems(
-            DatosTemporales.getTurnos()
-        );
-
-        cmbEstado.setItems(
-            FXCollections.observableArrayList(
-                "Activo",
-                "Inactivo",
-                "Vacaciones",
-                "Suspendido"
-            )
-        );
+        cmbEstado.setItems(FXCollections.observableArrayList(
+            "Activo", "Inactivo", "Vacaciones", "Suspendido"
+        ));
 
         cmbEstado.setValue("Activo");
-
-        fechaIngreso.setValue(
-            LocalDate.now()
-        );
+        fechaIngreso.setValue(LocalDate.now());
     }
 
-    // recibir empleado
+    public void setEmpleadoEditar(Empleado empleado) {
+        empleadoEditar = empleado;
 
-    public void setEmpleadoEditar(
-            Empleado empleado) {
+        txtNombre.setText(empleado.getNombre());
+        txtApellidos.setText(empleado.getApellidos());
+        txtTelefono.setText(empleado.getTelefono());
+        txtEmail.setText(empleado.getEmail());
+        txtDireccion.setText(empleado.getDireccion());
+        fechaIngreso.setValue(empleado.getFechaIngreso());
+        txtSalario.setText(String.valueOf(empleado.getSalario()));
 
-        this.empleadoEditar = empleado;
-
-        txtNombre.setText(
-            empleado.getNombre()
-        );
-
-        txtApellidos.setText(
-            empleado.getApellidos()
-        );
-
-        txtTelefono.setText(
-            empleado.getTelefono()
-        );
-
-        txtEmail.setText(
-            empleado.getEmail()
-        );
-
-        txtDireccion.setText(
-            empleado.getDireccion()
-        );
-
-        fechaIngreso.setValue(
-            empleado.getFechaIngreso()
-        );
-
-        txtSalario.setText(
-            String.valueOf(
-                empleado.getSalario()
-            )
-        );
-
-        cmbRol.setValue(
-            empleado.getRol()
-        );
-
-        cmbTurno.setValue(
-            empleado.getTurno()
-        );
-
-        cmbEstado.setValue(
-            empleado.getEstado()
-        );
+        cmbRol.setValue(empleado.getRol());
+        cmbTurno.setValue(empleado.getTurno());
+        cmbEstado.setValue(empleado.getEstado());
     }
-
-    // registrar o modificar
 
     @FXML
     private void registrarEmpleado() {
@@ -140,316 +70,217 @@ public class NuevoEmpleadoController {
         }
 
         try {
+            double salario = Double.parseDouble(txtSalario.getText());
 
-            double salario =
-                Double.parseDouble(
-                    txtSalario
-                        .getText()
-                        .trim()
-                );
-
-            Rol rol =
-                cmbRol.getValue();
-
-            Turno turno =
-                cmbTurno.getValue();
-
-            if (empleadoEditar != null) {
-
-                modificarEmpleado(
-                    salario,
-                    rol,
-                    turno
-                );
-
+            if (empleadoEditar == null) {
+                crearEmpleado(salario);
             } else {
-
-                crearEmpleado(
-                    salario,
-                    rol,
-                    turno
-                );
+                modificarEmpleado(salario);
             }
 
-        } catch (NumberFormatException e) {
-
+        } catch (Exception e) {
             mostrarMensaje(
                 Alert.AlertType.ERROR,
-                "Salario inválido",
-                "El salario debe contener únicamente números."
+                "Error",
+                "No fue posible guardar los datos del empleado."
             );
         }
     }
 
-    // modificar empleado
+    private void crearEmpleado(double salario) {
 
-    private void modificarEmpleado(
-            double salario,
-            Rol rol,
-            Turno turno) {
-
-        empleadoEditar.setNombre(
-            txtNombre.getText().trim()
+        Empleado empleado = new Empleado(
+            0,
+            0,
+            txtNombre.getText().trim(),
+            txtApellidos.getText().trim(),
+            txtTelefono.getText().trim(),
+            txtEmail.getText().trim(),
+            txtDireccion.getText().trim(),
+            fechaIngreso.getValue(),
+            salario,
+            cmbEstado.getValue(),
+            cmbRol.getValue(),
+            cmbTurno.getValue()
         );
 
-        empleadoEditar.setApellidos(
-            txtApellidos.getText().trim()
+        DatosTemporales.agregarEmpleado(empleado);
+
+        mostrarMensaje(
+            Alert.AlertType.INFORMATION,
+            "Registro correcto",
+            "El empleado fue registrado correctamente."
         );
 
-        empleadoEditar.setTelefono(
-            txtTelefono.getText().trim()
-        );
+        cerrarVentana();
+    }
 
-        empleadoEditar.setEmail(
-            txtEmail.getText().trim()
-        );
+    private void modificarEmpleado(double salario) {
 
-        empleadoEditar.setDireccion(
-            txtDireccion.getText().trim()
-        );
-
-        empleadoEditar.setFechaIngreso(
-            fechaIngreso.getValue()
-        );
-
-        empleadoEditar.setSalario(
-            salario
-        );
-
-        empleadoEditar.setEstado(
-            cmbEstado.getValue()
-        );
-
-        empleadoEditar.setRol(
-            rol
-        );
-
-        empleadoEditar.setTurno(
-            turno
-        );
+        empleadoEditar.setNombre(txtNombre.getText().trim());
+        empleadoEditar.setApellidos(txtApellidos.getText().trim());
+        empleadoEditar.setTelefono(txtTelefono.getText().trim());
+        empleadoEditar.setEmail(txtEmail.getText().trim());
+        empleadoEditar.setDireccion(txtDireccion.getText().trim());
+        empleadoEditar.setFechaIngreso(fechaIngreso.getValue());
+        empleadoEditar.setSalario(salario);
+        empleadoEditar.setEstado(cmbEstado.getValue());
+        empleadoEditar.setRol(cmbRol.getValue());
+        empleadoEditar.setTurno(cmbTurno.getValue());
 
         DatosTemporales.registrarHistorial(
             empleadoEditar,
             "Empleado modificado",
-            "Se modificó la información del empleado "
-            + empleadoEditar.getNombreCompleto()
+            "Se modificaron los datos del empleado."
         );
 
         mostrarMensaje(
             Alert.AlertType.INFORMATION,
-            "Empleado modificado",
-            "La información fue actualizada correctamente."
+            "Modificación correcta",
+            "Los datos fueron actualizados correctamente."
         );
 
         cerrarVentana();
     }
-
-    // crear empleado
-
-    private void crearEmpleado(
-            double salario,
-            Rol rol,
-            Turno turno) {
-
-        Empleado empleado =
-            new Empleado(
-                0,
-                0,
-                txtNombre.getText().trim(),
-                txtApellidos.getText().trim(),
-                txtTelefono.getText().trim(),
-                txtEmail.getText().trim(),
-                txtDireccion.getText().trim(),
-                fechaIngreso.getValue(),
-                salario,
-                cmbEstado.getValue(),
-                rol,
-                turno
-            );
-
-        DatosTemporales.agregarEmpleado(
-            empleado
-        );
-
-        mostrarMensaje(
-            Alert.AlertType.INFORMATION,
-            "Empleado registrado",
-            "El empleado "
-            + empleado.getNombreCompleto()
-            + " fue registrado correctamente."
-        );
-
-        cerrarVentana();
-    }
-
-    // validar
 
     private boolean validarCampos() {
 
-        if (txtNombre.getText()
-            .trim()
-            .isEmpty()) {
+        String nombre = txtNombre.getText().trim();
+        String apellidos = txtApellidos.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+        String email = txtEmail.getText().trim();
+        String salarioTexto = txtSalario.getText().trim();
+
+        if (nombre.isEmpty() || apellidos.isEmpty()
+                || telefono.isEmpty() || email.isEmpty()
+                || salarioTexto.isEmpty()
+                || txtDireccion.getText().trim().isEmpty()) {
 
             mostrarMensaje(
                 Alert.AlertType.WARNING,
-                "Campo requerido",
-                "Ingresa el nombre."
+                "Campos obligatorios",
+                "Completa todos los campos."
             );
+            return false;
+        }
 
+        // Validar nombre
+        if (!nombre.matches("[\\p{L} ]+")) {
+            mostrarMensaje(
+                Alert.AlertType.WARNING,
+                "Nombre inválido",
+                "El nombre solo debe contener letras y espacios."
+            );
             txtNombre.requestFocus();
-
             return false;
         }
 
-        if (txtApellidos.getText()
-            .trim()
-            .isEmpty()) {
-
+        // Validar apellidos
+        if (!apellidos.matches("[\\p{L} ]+")) {
             mostrarMensaje(
                 Alert.AlertType.WARNING,
-                "Campo requerido",
-                "Ingresa los apellidos."
+                "Apellidos inválidos",
+                "Los apellidos solo deben contener letras y espacios."
             );
-
             txtApellidos.requestFocus();
-
             return false;
         }
 
-        if (txtTelefono.getText()
-            .trim()
-            .isEmpty()) {
-
+        // Validar correo
+        if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             mostrarMensaje(
                 Alert.AlertType.WARNING,
-                "Campo requerido",
-                "Ingresa el teléfono."
+                "Correo inválido",
+                "Ingresa un correo electrónico válido."
             );
+            txtEmail.requestFocus();
+            return false;
+        }
 
+        // Validar teléfono: 10 dígitos
+        if (!telefono.matches("[0-9]{10}")) {
+            mostrarMensaje(
+                Alert.AlertType.WARNING,
+                "Teléfono inválido",
+                "El teléfono debe contener exactamente 10 dígitos."
+            );
             txtTelefono.requestFocus();
-
             return false;
         }
 
-        if (txtSalario.getText()
-            .trim()
-            .isEmpty()) {
-
-            mostrarMensaje(
-                Alert.AlertType.WARNING,
-                "Campo requerido",
-                "Ingresa el salario."
-            );
-
-            txtSalario.requestFocus();
-
-            return false;
-        }
-
-        if (cmbRol.getValue() == null) {
-
-            mostrarMensaje(
-                Alert.AlertType.WARNING,
-                "Rol requerido",
-                "Selecciona un rol."
-            );
-
-            return false;
-        }
-
-        if (cmbTurno.getValue() == null) {
-
-            mostrarMensaje(
-                Alert.AlertType.WARNING,
-                "Turno requerido",
-                "Selecciona un turno."
-            );
-
-            return false;
-        }
-
-        if (cmbEstado.getValue() == null) {
-
-            mostrarMensaje(
-                Alert.AlertType.WARNING,
-                "Estado requerido",
-                "Selecciona el estado."
-            );
-
-            return false;
-        }
-
+        // Validar fecha
         if (fechaIngreso.getValue() == null) {
-
             mostrarMensaje(
                 Alert.AlertType.WARNING,
                 "Fecha requerida",
                 "Selecciona la fecha de ingreso."
             );
-
             return false;
         }
 
+        if (fechaIngreso.getValue().isAfter(LocalDate.now())) {
+            mostrarMensaje(
+                Alert.AlertType.WARNING,
+                "Fecha inválida",
+                "La fecha de ingreso no puede ser futura."
+            );
+            return false;
+        }
+
+        // Validar salario
         try {
+            double salario = Double.parseDouble(salarioTexto);
 
-            double salario =
-                Double.parseDouble(
-                    txtSalario
-                        .getText()
-                        .trim()
-                );
-
-            if (salario < 0) {
-
+            if (salario < 0 || Double.isInfinite(salario)
+                    || Double.isNaN(salario)) {
                 mostrarMensaje(
                     Alert.AlertType.WARNING,
                     "Salario inválido",
-                    "El salario no puede ser negativo."
+                    "El salario debe ser un número mayor o igual a cero."
                 );
-
+                txtSalario.requestFocus();
                 return false;
             }
 
         } catch (NumberFormatException e) {
-
             mostrarMensaje(
                 Alert.AlertType.WARNING,
                 "Salario inválido",
-                "Ingresa un salario válido."
+                "Ingresa un salario numérico válido."
             );
+            txtSalario.requestFocus();
+            return false;
+        }
 
+        if (cmbRol.getValue() == null
+                || cmbTurno.getValue() == null
+                || cmbEstado.getValue() == null) {
+
+            mostrarMensaje(
+                Alert.AlertType.WARNING,
+                "Datos incompletos",
+                "Selecciona un rol, un turno y un estado."
+            );
             return false;
         }
 
         return true;
     }
 
-    // cerrar
-
     @FXML
     private void cerrarVentana() {
-
-        Stage stage =
-            (Stage) txtNombre
-                .getScene()
-                .getWindow();
-
-        stage.close();
+        Stage ventana = (Stage) txtNombre.getScene().getWindow();
+        ventana.close();
     }
 
-    // mostrar mensaje
-
     private void mostrarMensaje(
-            Alert.AlertType tipo,
-            String titulo,
-            String mensaje) {
+            Alert.AlertType tipo, String titulo, String mensaje) {
 
-        Alert alerta =
-            new Alert(tipo);
-
+        Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
+
 }

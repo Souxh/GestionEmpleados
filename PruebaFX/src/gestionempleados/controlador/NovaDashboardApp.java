@@ -10,6 +10,8 @@ public class NovaDashboardApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        System.out.println(System.getProperty("javafx.runtime.version"));
+
 
         FXMLLoader loader =
                 new FXMLLoader(
@@ -38,5 +40,6 @@ public class NovaDashboardApp extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
     }
 }

@@ -70,6 +70,9 @@ public class NovaDashboardController {
     @FXML
     private Label lblEmpleadosNoActivos;
 
+    @FXML
+    private Label lblTotalAcciones;
+
     private final DateTimeFormatter formatoFecha =
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -84,9 +87,7 @@ public class NovaDashboardController {
         actualizarTablas();
     }
 
- 
     // TABLA DE EMPLEADOS
-    
 
     private void inicializarTablaEmpleados() {
 
@@ -103,9 +104,7 @@ public class NovaDashboardController {
             }
 
             return new SimpleStringProperty(
-                    data.getValue()
-                            .getRol()
-                            .getNombre()
+                    data.getValue().getRol().getNombre()
             );
         });
 
@@ -116,9 +115,7 @@ public class NovaDashboardController {
             }
 
             return new SimpleStringProperty(
-                    data.getValue()
-                            .getTurno()
-                            .getNombre()
+                    data.getValue().getTurno().getNombre()
             );
         });
 
@@ -143,25 +140,20 @@ public class NovaDashboardController {
         );
     }
 
-    
     // TABLA DE HISTORIAL
-    
 
     private void inicializarTablaAcciones() {
 
         colAccionEmpleado.setCellValueFactory(data -> {
 
-            HistorialAccion historial =
-                    data.getValue();
+            HistorialAccion historial = data.getValue();
 
             if (historial.getEmpleado() == null) {
                 return new SimpleStringProperty("-");
             }
 
             return new SimpleStringProperty(
-                    historial
-                            .getEmpleado()
-                            .getNombreCompleto()
+                    historial.getEmpleado().getNombreCompleto()
             );
         });
 
@@ -201,24 +193,19 @@ public class NovaDashboardController {
         });
     }
 
-    
     // ACTUALIZAR TABLAS
-    
 
     public void actualizarTablas() {
 
         ObservableList<Empleado> empleadosActivos =
                 FXCollections.observableArrayList(
-                        DatosTemporales
-                                .getEmpleados()
+                        DatosTemporales.getEmpleados()
                                 .stream()
                                 .filter(this::estaActivo)
                                 .collect(Collectors.toList())
                 );
 
-        tablaEmpleados.setItems(
-                empleadosActivos
-        );
+        tablaEmpleados.setItems(empleadosActivos);
 
         tablaAcciones.setItems(
                 DatosTemporales.getHistorial()
@@ -227,9 +214,7 @@ public class NovaDashboardController {
         actualizarContadores();
     }
 
-    
     // COMPROBAR EMPLEADO ACTIVO
-    
 
     private boolean estaActivo(Empleado empleado) {
 
@@ -241,31 +226,23 @@ public class NovaDashboardController {
             return false;
         }
 
-        return empleado
-                .getEstado()
-                .equalsIgnoreCase("Activo");
+        return empleado.getEstado().equalsIgnoreCase("Activo");
     }
 
-   
     // CONTADORES
-    
 
     private void actualizarContadores() {
 
         int total =
-                DatosTemporales
-                        .getEmpleados()
-                        .size();
+                DatosTemporales.getEmpleados().size();
 
         int activos =
-                (int) DatosTemporales
-                        .getEmpleados()
+                (int) DatosTemporales.getEmpleados()
                         .stream()
                         .filter(this::estaActivo)
                         .count();
 
-        int noActivos =
-                total - activos;
+        int noActivos = total - activos;
 
         lblTotalEmpleados.setText(
                 String.valueOf(total)
@@ -278,11 +255,13 @@ public class NovaDashboardController {
         lblEmpleadosNoActivos.setText(
                 String.valueOf(noActivos)
         );
+
+        lblTotalAcciones.setText(
+                String.valueOf(DatosTemporales.getHistorial().size())
+        );
     }
 
-    
     // NUEVO EMPLEADO
-    
 
     @FXML
     private void abrirNuevoEmpleado() {
@@ -299,20 +278,16 @@ public class NovaDashboardController {
             if (loader.getLocation() == null) {
 
                 throw new IOException(
-                        "No se encontró el archivo " +
-                        "/gestionempleados/NuevoEmpleado.fxml"
+                        "No se encontró el archivo "
+                        + "/gestionempleados/NuevoEmpleado.fxml"
                 );
             }
 
-            Parent root =
-                    loader.load();
+            Parent root = loader.load();
 
-            Stage ventana =
-                    new Stage();
+            Stage ventana = new Stage();
 
-            ventana.setTitle(
-                    "Nuevo empleado"
-            );
+            ventana.setTitle("Nuevo empleado");
 
             ventana.setScene(
                     new Scene(root)
@@ -339,9 +314,7 @@ public class NovaDashboardController {
         }
     }
 
-    
-    // GESTIÓN DE EMPLEADOS
-    
+    // GESTION DE EMPLEADOS
 
     @FXML
     private void abrirGestionEmpleados() {
@@ -358,20 +331,16 @@ public class NovaDashboardController {
             if (loader.getLocation() == null) {
 
                 throw new IOException(
-                        "No se encontró el archivo " +
-                        "/gestionempleados/Empleados.fxml"
+                        "No se encontró el archivo "
+                        + "/gestionempleados/Empleados.fxml"
                 );
             }
 
-            Parent root =
-                    loader.load();
+            Parent root = loader.load();
 
-            Stage ventana =
-                    new Stage();
+            Stage ventana = new Stage();
 
-            ventana.setTitle(
-                    "Gestión de empleados"
-            );
+            ventana.setTitle("Gestión de empleados");
 
             ventana.setScene(
                     new Scene(root)
@@ -398,9 +367,7 @@ public class NovaDashboardController {
         }
     }
 
-    
     // MODIFICAR EMPLEADO
-    
 
     @FXML
     private void modificarEmpleado() {
@@ -420,18 +387,12 @@ public class NovaDashboardController {
             return;
         }
 
-        abrirFormularioEdicion(
-                seleccionado
-        );
+        abrirFormularioEdicion(seleccionado);
     }
 
-    
-    // FORMULARIO DE EDICIÓN
-    
+    // FORMULARIO DE EDICION
 
-    private void abrirFormularioEdicion(
-            Empleado empleado
-    ) {
+    private void abrirFormularioEdicion(Empleado empleado) {
 
         try {
 
@@ -445,13 +406,12 @@ public class NovaDashboardController {
             if (loader.getLocation() == null) {
 
                 throw new IOException(
-                        "No se encontró el archivo " +
-                        "/gestionempleados/NuevoEmpleado.fxml"
+                        "No se encontró el archivo "
+                        + "/gestionempleados/NuevoEmpleado.fxml"
                 );
             }
 
-            Parent root =
-                    loader.load();
+            Parent root = loader.load();
 
             NuevoEmpleadoController controller =
                     loader.getController();
@@ -459,21 +419,15 @@ public class NovaDashboardController {
             if (controller == null) {
 
                 throw new IOException(
-                        "No se pudo obtener " +
-                        "NuevoEmpleadoController."
+                        "No se pudo obtener NuevoEmpleadoController."
                 );
             }
 
-            controller.setEmpleadoEditar(
-                    empleado
-            );
+            controller.setEmpleadoEditar(empleado);
 
-            Stage ventana =
-                    new Stage();
+            Stage ventana = new Stage();
 
-            ventana.setTitle(
-                    "Modificar empleado"
-            );
+            ventana.setTitle("Modificar empleado");
 
             ventana.setScene(
                     new Scene(root)
@@ -500,73 +454,41 @@ public class NovaDashboardController {
         }
     }
 
-    
     // MENSAJE DE ERROR
-    
 
-    private void mostrarError(
-            String titulo,
-            Exception e
-    ) {
+    private void mostrarError(String titulo, Exception e) {
 
         Alert alerta =
-                new Alert(
-                        Alert.AlertType.ERROR
-                );
+                new Alert(Alert.AlertType.ERROR);
 
-        alerta.setTitle(
-                "Error"
-        );
+        alerta.setTitle("Error");
 
-        alerta.setHeaderText(
-                titulo
-        );
+        alerta.setHeaderText(titulo);
 
-        String mensaje =
-                e.getMessage();
+        String mensaje = e.getMessage();
 
-        if (mensaje == null ||
-                mensaje.isBlank()) {
-
-            mensaje =
-                    e.getClass()
-                            .getSimpleName();
+        if (mensaje == null || mensaje.isBlank()) {
+            mensaje = e.getClass().getSimpleName();
         }
 
-        alerta.setContentText(
-                mensaje
-        );
+        alerta.setContentText(mensaje);
 
         alerta.showAndWait();
     }
 
-    
     // MENSAJE DE AVISO
-    
 
-    private void mostrarAviso(
-            String titulo,
-            String mensaje
-    ) {
+    private void mostrarAviso(String titulo, String mensaje) {
 
         Alert alerta =
-                new Alert(
-                        Alert.AlertType.WARNING
-                );
+                new Alert(Alert.AlertType.WARNING);
 
-        alerta.setTitle(
-                "Aviso"
-        );
+        alerta.setTitle("Aviso");
 
-        alerta.setHeaderText(
-                titulo
-        );
+        alerta.setHeaderText(titulo);
 
-        alerta.setContentText(
-                mensaje
-        );
+        alerta.setContentText(mensaje);
 
         alerta.showAndWait();
     }
 }
-
